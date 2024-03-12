@@ -1,0 +1,148 @@
+
+# =============================================================================
+#  NonLinLoc programs control file
+#
+#  NonLinLoc Version 7.0 - March 2018
+# =============================================================================
+
+# =============================================================================
+# =============================================================================
+# Generic control file statements
+# =============================================================================
+
+CONTROL 3 54321
+
+
+# output filename root
+# (VGOUT <output file root>)
+
+TRANS LAMBERT Clarke-1880 -39.4 176.0 -38.0 -40.8 0.0
+
+# =============================================================================
+# END of Generic control file statements
+# =============================================================================
+# =============================================================================
+
+# =============================================================================
+# =============================================================================
+# Vel2Grid control file statements
+# =============================================================================
+
+# output filename root (VGOUT <output file root>)
+VGOUT  VEL/vmodel
+
+# wave type (VGTYPE wave_type (P, S))
+VGTYPE P
+
+# VGGRID xNum yNum zNum xOrig yOrig zOrig dx dy dz gridType
+VGGRID 201 201 101 -100.0 -100.0 -2.0 1.0 1.0 1.0 SLOW_LEN
+
+LAYER 0.0  3.99 0.0 2.28 0.0 2.39 0.0
+LAYER 2.0  4.76 0.0 2.73 0.0 2.50 0.0
+LAYER 4.0  5.31 0.0 3.00 0.0 2.58 0.0
+LAYER 6.0  5.70 0.0 3.32 0.0 2.66 0.0
+LAYER 8.0  6.13 0.0 3.59 0.0 2.74 0.0
+LAYER 10.0 6.24 0.0 3.64 0.0 2.77 0.0
+LAYER 12.0 6.36 0.0 3.70 0.0 2.80 0.0
+LAYER 14.0 6.48 0.0 3.74 0.0 2.83 0.0
+LAYER 16.0 6.55 0.0 3.77 0.0 2.85 0.0
+LAYER 18.0 6.57 0.0 3.77 0.0 2.85 0.0
+LAYER 20.0 6.58 0.0 3.77 0.0 2.85 0.0
+LAYER 22.0 6.60 0.0 3.78 0.0 2.86 0.0
+LAYER 24.0 6.66 0.0 3.80 0.0 2.88 0.0
+LAYER 28.0 6.85 0.0 3.90 0.0 2.93 0.0
+LAYER 32.0 7.10 0.0 4.03 0.0 3.00 0.0
+LAYER 36.0 7.42 0.0 4.23 0.0 3.10 0.0
+LAYER 40.0 7.68 0.0 4.35 0.0 3.18 0.0
+LAYER 44.0 7.82 0.0 4.41 0.0 3.23 0.0
+LAYER 48.0 7.85 0.0 4.45 0.0 3.24 0.0
+LAYER 52.0 7.82 0.0 4.42 0.0 3.23 0.0
+LAYER 56.0 7.79 0.0 4.39 0.0 3.22 0.0
+LAYER 60.0 7.79 0.0 4.36 0.0 3.22 0.0
+LAYER 70.0 7.87 0.0 4.34 0.0 3.24 0.0
+LAYER 80.0 7.98 0.0 4.40 0.0 3.28 0.0
+LAYER 90.0 8.09 0.0 4.44 0.0 3.32 0.0
+
+# =============================================================================
+# END of Vel2Grid control file statements
+# =============================================================================
+# =============================================================================
+
+# =============================================================================
+# =============================================================================
+# Grid2Time control file statements
+# =============================================================================
+
+GTFILES VEL/vmodel TIME/travel_times P
+
+GTMODE GRID3D ANGLES_YES
+
+# Station file (INCLUDE <station_file>) or list
+# GTSRCE OUZ   LATLON -35.2197  173.5961 0.0 0.063
+# INCLUDE stations.in
+
+GTSRCE MCHZ LATLON -39.4442645   176.6967183   0 0.349
+GTSRCE NMHZ LATLON -39.097054929 176.80651785  0 0.864
+GTSRCE NTVZ LATLON -39.0984817   175.6759733   0 1.260
+GTSRCE SNVZ LATLON -39.1862267   175.6403333   0 1.604
+GTSRCE TMVZ LATLON -39.11561     175.704064    0 1.200
+GTSRCE BKZ  LATLON -39.165665643 176.492543736 0 0.706
+GTSRCE ETVZ LATLON -39.1357      175.7106      0 1.236
+GTSRCE KRHZ LATLON -39.6449      176.36993     0 0.530
+GTSRCE KWHZ LATLON -39.424       176.4228      0 0.854
+GTSRCE MOVZ LATLON -39.406748938 175.752843727 0 0.874
+GTSRCE MRHZ LATLON -38.8337      176.4173      0 0.772
+GTSRCE OTVZ LATLON -39.163113759 175.665073554 0 1.506
+
+GT_PLFD  1.0e-3  1
+
+# =============================================================================
+# END of Grid2Time control file statements
+# =============================================================================
+# =============================================================================
+
+# =============================================================================
+# =============================================================================
+# NLLoc control file statements
+# =============================================================================
+
+LOCSIG GNS 
+LOCCOM 2024 GNS/GEONET
+
+# input pick files
+LOCFILES IN/*.pick NLLOC_OBS TIME/travel_times OUT/example_lfe
+
+# LOCHYPOUT SAVE_NLLOC_ALL SAVE_HYPOINV_SUM SAVE_HYPOELL_SUM
+LOCHYPOUT SAVE_NLLOC_ALL
+
+# sampling algorithm
+LOCSEARCH  OCT 30 30 30 0.001 50000 5000 1 0
+
+# sampled grid
+LOCGRID 201 201 101 -100.0 -100.0 -2 1.0 1.0 1.0 PROB_DENSITY SAVE
+
+# LOCMETH method maxDistStaGrid minNumberPhases maxNumberPhases minNumberSphases VpVsRatio maxNum3DGridMemory minDistStaGrid iRejectDuplicateArrivals
+LOCMETH EDT_OT_WT 250.0 4 -1 -1 -1 400 -1.0 0
+
+# Gaussian model errors (LOCGAU SigmaTime CorrLen)
+LOCGAU 0.2 10.0
+# Travel-Time dependent model errors (LOCGAU2 SigmaTfraction SigmaTmin SigmaTmax) 
+LOCGAU2 0.07 0. 0.5
+
+LOCPHASEID  P   P p G PN PG Pb Pn Pg PB
+LOCPHASEID  S   S s G SN SG Sb Sn Sg SB
+
+# Phase statistics parameters 
+# LOCPHSTAT RMS_Max NRdgs_Min Gap_Max P_ResidualMax S_ResidualMax Ell_Len3_Max Hypo_Depth_Min Hypo_Depth_Max Hypo_Dist_Max
+LOCPHSTAT 9999.0 -1 9999.0 1.0 1.0 9999.9 -9999.9 9999.9
+
+# Take-off angles parameters (LOCANGLES angleMode qualtiyMin)
+LOCANGLES ANGLES_YES 5
+
+# Quality to error mapping (LOCQUAL2ERR Err0 ... ... ... ...)
+LOCQUAL2ERR 0.05 0.1 0.2 0.6 99999.9 99999.9 99999.9 99999.9 99999.9 99999.9
+
+# =============================================================================
+# END of NLLoc control file statements
+# =============================================================================
+# =============================================================================
